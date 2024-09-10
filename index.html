@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+      }
+
+      html{
+        font-size: 16px;
+      }
+
+      .bold{
+        font-weight: bold;
+      }
+
+      body {
+        background: #78c1f3;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .container {
+        background: #ffffff;
+        padding: 1.563rem;
+        width: 28.125rem;
+        border-radius: 0.625rem;
+      }
+      .container h2 {
+        text-align: center;
+        margin-bottom: 0.938rem;
+      }
+
+      .input-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 1.875rem;
+        margin-bottom: 0.938rem;
+        background: #78c1f3;
+      }
+
+      .input-box input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0.938rem;
+        font-size: 1.125rem;
+        color: #ffffff;
+        cursor: pointer;
+      }
+
+      .input-box img {
+        height: 3.438rem;
+        width: 3.438rem;
+        background: limegreen;
+        border-radius: 1.875rem;
+        padding: 0.938rem;
+        cursor: pointer;
+      }
+
+      img {
+        height: 2.188rem;
+        width: 2.188rem;
+      }
+      .output-box {
+        margin: 0.938rem;
+        width: 28.125rem;
+      }
+
+      .output-box div {
+        display: flex;
+        align-items: center;
+        gap: .3rem;
+        padding-left: 10%;
+        margin-bottom: 0.313rem;
+        font-weight: 500;
+      }
+
+      .output-box table {
+        width: 100%;
+        padding: 0.938rem 0;
+      }
+
+      td {
+        padding: 0.313rem;
+        border-bottom: 0.063rem solid #ddd;
+      }
+
+      @media (max-width: 305px){
+        html{
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>AGE Calculator</h2>
+      <div class="input-box">
+        <input type="date" name="ageValue" placeholder="Enter Ur Data of Birth" id="ageValue" />
+        <img id="calculateAge" src="images/arrow-right.png" />
+      </div>
+    </div>
+    <div class="output-box">
+      <label>Your Age is: </label>
+      <div>
+        <strong id="CurrentAge">0 years 0 Months 0 Days</strong>
+        <img src="images/age.png" />
+      </div>
+
+      <label>Your Date of Birth is:</label>
+      <div>
+        <strong id="DOB">Monday, January 00, 0000</strong>
+        <img src="images/birthday-cake.png" />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">You Already Lived</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>In Years</td>
+            <td><strong id="InYears">0</strong> Years</td>
+          </tr>
+          <tr>
+            <td>In Months</td>
+            <td><strong id="InMonths">0</strong> Months</td>
+          </tr>
+          <tr>
+            <td>In Weeks</td>
+            <td><strong id="InWeeks">0</strong> Weeks</td>
+          </tr>
+          <tr>
+            <td>In Days</td>
+            <td><strong id="InDays">0</strong> Days</td>
+          </tr>
+          <tr>
+            <td>In Hours</td>
+            <td><strong id="InHours">0</strong> Hours</td>
+          </tr>
+          <tr>
+            <td>In Minutes</td>
+            <td><strong id="InMinutes">0</strong> Minutes</td>
+          </tr>
+          <tr>
+            <td>In Seconds</td>
+            <td><strong id="InSeconds">0</strong> Seconds</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <strong id="DaysLeft">0</strong> <p id="birthdayText">Days Left for your Next Birthday</p><img
+          src="images/confetti.png" style="border: 1px solid red;"
+        />
+      </div>
+    </div>
+
+    <script>
+      const ageValue = document.getElementById("ageValue");
+      const calculateAge = document.getElementById("calculateAge");
+      const CurrentAge = document.getElementById("CurrentAge");
+      const DOB = document.getElementById("DOB");
+      const InYears = document.getElementById("InYears");
+      const InMonths = document.getElementById("InMonths");
+      const InWeeks = document.getElementById("InWeeks");
+      const InDays = document.getElementById("InDays");
+      const InHours = document.getElementById("InHours");
+      const InMinutes = document.getElementById("InMinutes");
+      const InSeconds = document.getElementById("InSeconds");
+      const DaysLeft = document.getElementById("DaysLeft");
+      const birthdayText = document.getElementById("birthdayText");
+
+      const seconds = 1000;
+      const minutes = 60;
+      const hours = 24;
+      const week = 7;
+
+      const today = new Date();
+      let maxDate = today.toISOString().substring(0, 10);
+      ageValue.setAttribute("max", maxDate);
+      
+      calculateAge.addEventListener("click", function (e) {
+      let birthday = new Date(ageValue.value);
+
+        if (ageValue.value === "") {
+          alert("Please enter a valid Date of Birth.");
+          return;
+        }
+
+        if (birthday > today) {
+          alert("Invalid Date of Birth.");
+          return;
+        }
+
+        // Calculate the difference in total years
+        let TotalYears = today.getFullYear() - birthday.getFullYear();
+
+        // Check if the birthday has passed this year, otherwise subtract 1 year
+        let hasHadBirthdayThisYear =
+          today.getMonth() > birthday.getMonth() || (today.getMonth() === birthday.getMonth() &&
+            today.getDate() >= birthday.getDate());
+        if (!hasHadBirthdayThisYear) {
+          TotalYears--;
+        }
+
+        // Calculate months
+        let TotalMonths = today.getMonth() - birthday.getMonth();
+        if (TotalMonths < 0) {
+          TotalMonths += 12;
+        }
+
+        // Calculate days
+        let TotalDays = today.getDate() - birthday.getDate();
+        if (TotalDays < 0) {
+          // If the day difference is negative, go to the previous month
+          let previousMonth = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            0
+          );
+          TotalDays += previousMonth.getDate();
+          TotalMonths--;
+
+          if (TotalMonths < 0) {
+            TotalMonths += 12;
+            TotalYears--;
+          }
+        }
+
+        // Calculate total days, weeks, hours, minutes, and seconds
+        let oneDay = seconds * minutes * minutes * hours;
+        let totalDaysLived = Math.floor(
+          (today.getTime() - birthday.getTime()) / oneDay
+        );
+        let TotalWeeks = Math.floor(totalDaysLived / week);
+        let TotalHours = Math.floor(totalDaysLived * 24);
+        let TotalMinutes = Math.floor(totalDaysLived * 24 * 60);
+        let TotalSeconds = Math.floor(totalDaysLived * 24 * 60 * 60);
+
+        // Display the calculated age
+        CurrentAge.innerText = `${TotalYears <= 0 ? 0 : TotalYears} Years, ${TotalMonths} Months, and ${TotalDays} Days`;
+        DOB.innerText = `${birthday.toLocaleString("default", {
+          weekday: "long",
+        })}, ${birthday.toLocaleString("default", {
+          month: "long",
+        })} ${birthday.getDate()}, ${birthday.getFullYear()}`;
+        InYears.innerText = TotalYears <= 0 ? 0 : TotalYears;
+        InMonths.innerText = (TotalYears <= 0 ? 0 : TotalYears) * 12 + TotalMonths; // Total months lived
+        InWeeks.innerText = TotalWeeks;
+        InDays.innerText = totalDaysLived;
+        InHours.innerText = TotalHours;
+        InMinutes.innerText = TotalMinutes;
+        InSeconds.innerText = TotalSeconds;
+
+        // Calculate days left until next birthday
+        let nextBirthday = new Date(
+          today.getFullYear(),
+          birthday.getMonth(),
+          birthday.getDate()
+        );
+        if (today > nextBirthday) {
+          nextBirthday.setFullYear(today.getFullYear() + 1);
+        }
+        let daysUntilNextBirthday = Math.floor(
+          (nextBirthday.getTime() - today.getTime()) / oneDay
+        );
+        if(daysUntilNextBirthday === 0){
+          alert('Today is your Birthday :) Happy Birthday :)')
+          DaysLeft.innerText = 'Today is your Birthday :) Happy Birthday :)';
+          birthdayText.innerText = '';
+        } else {
+          DaysLeft.innerText = daysUntilNextBirthday;
+        }
+      });
+    </script>
+  </body>
+</html>
