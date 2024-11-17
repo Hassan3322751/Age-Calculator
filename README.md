@@ -3,31 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Age Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-      text-align: center;
-    }
-    h2 {
-      color: #666;
-    }
-    p {
-      margin-bottom: 20px;
-    }
-    code {
-      background-color: #f0f0f0;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-  </style>
+  
 </head>
 <body>
 
